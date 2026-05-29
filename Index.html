@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Get Well Soon Kanishka 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --rose: #e8315a;
+    --blush: #fcd5df;
+    --deep: #7a1030;
+    --petal: #fff0f5;
+    --mint: #d4f5e9;
+    --green: #4caf82;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #fff0f5 0%, #fde8ef 50%, #e8f8f2 100%);
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+  }
+
+  canvas#bg {
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ======= SCREEN 1 — ARE YOU FINE ======= */
+  #screen1 {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2rem; padding: 2rem;
+    background: linear-gradient(160deg, #fff0f5 0%, #fde8ef 60%, #e8f8f2 100%);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  #screen1.hide {
+    opacity: 0; transform: scale(0.92) translateY(-30px);
+    pointer-events: none;
+  }
+
+  .s1-cat { animation: floatCat 3s ease-in-out infinite; }
+  @keyframes floatCat {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+
+  .s1-question {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    color: var(--rose); text-align: center;
+    line-height: 1.3;
+    animation: popIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .s1-question span { color: var(--deep); font-style: italic; }
+
+  .s1-subtitle {
+    font-size: 1rem; color: #b06080;
+    text-align: center; font-style: italic;
+    animation: popIn 0.8s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .btn-row-s1 {
+    display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center;
+    animation: popIn 0.8s 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  .btn-yes {
+    background: #ccc; color: #888;
+    border: 2px solid #bbb;
+    padding: 0.9rem 2.2rem; border-radius: 50px;
+    font-size: 1.1rem; font-family: 'Nunito', sans-serif; font-weight: 700;
+    cursor: not-allowed;
+    position: relative;
+    transition: all 0.15s;
+  }
+  .btn-yes:hover .tooltip {
+    opacity: 1; transform: translateY(-4px);
+  }
+  .tooltip {
+    position: absolute; bottom: calc(100% + 10px); left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: #333; color: white;
+    padding: 6px 14px; border-radius: 10px;
+    font-size: 0.78rem; white-space: nowrap;
+    opacity: 0; transition: all 0.2s; pointer-events: none;
+  }
+  .tooltip::after {
+    content: ''; position: absolute;
+    top: 100%; left: 50%; transform: translateX(-50%);
+    border: 5px solid transparent; border-top-color: #333;
+  }
+
+  .btn-no {
+    background: var(--rose); color: white;
+    border: none; padding: 0.9rem 2.4rem;
+    border-radius: 50px; font-size: 1.15rem;
+    font-family: 'Nunito', sans-serif; font-weight: 700;
+    cursor: pointer; box-shadow: 0 6px 20px rgba(232,49,90,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    animation: pulsebtn 2s ease-in-out infinite;
+  }
+  .btn-no:hover { transform: scale(1.08); box-shadow: 0 10px 28px rgba(232,49,90,0.5); }
+  @keyframes pulsebtn {
+    0%,100% { box-shadow: 0 6px 20px rgba(232,49,90,0.35); }
+    50%      { box-shadow: 0 6px 30px rgba(232,49,90,0.6); }
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.6) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ======= SCREEN 2 — MAIN PAGE ======= */
+  #screen2 {
+    position: relative; z-index: 1;
+    display: none; flex-direction: column;
+    align-items: center;
+    padding: 2.5rem 1rem 3.5rem;
+    gap: 2rem;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  #screen2.show {
+    display: flex;
+    opacity: 1; transform: translateY(0);
+  }
+  #screen2.animate {
+    opacity: 1; transform: translateY(0);
+  }
+
+  .main-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 7vw, 3.8rem);
+    color: var(--rose); text-align: center; line-height: 1.2;
+    animation: popIn 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .main-title span { color: var(--deep); font-style: italic; }
+
+  /* Cat Card */
+  .cat-card {
+    background: white;
+    border: 2.5px solid var(--blush);
+    border-radius: 28px;
+    padding: 2rem 2.5rem 1.6rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
+    box-shadow: 0 8px 32px rgba(232,49,90,0.10);
+    max-width: 320px; width: 100%;
+    animation: popIn 0.9s 0.2s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .cat-anim { animation: floatCat 3s ease-in-out infinite; }
+  .cat-tag {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; color: var(--green);
+    font-style: italic; font-weight: 700;
+  }
+  .cat-hearts { font-size: 1.4rem; letter-spacing: 8px; }
+
+  /* Note Card */
+  .note-card {
+    width: min(450px, 92vw);
+    background: white;
+    border: 2px solid var(--blush);
+    border-radius: 22px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(232,49,90,0.10);
+    animation: popIn 0.9s 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .note-header {
+    background: linear-gradient(90deg, #fcd5df 0%, #d4f5e9 100%);
+    padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .note-icon { font-size: 2rem; }
+  .note-header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem; color: var(--deep); font-style: italic;
+  }
+  .note-body {
+    padding: 1.6rem 2rem 1.5rem;
+    background: repeating-linear-gradient(transparent, transparent 29px, rgba(232,49,90,0.07) 30px);
+  }
+  .note-body p {
+    font-size: 1.04rem; color: #5a1a30;
+    line-height: 1.9; margin-bottom: 0.65rem;
+  }
+  .note-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; color: var(--rose); font-weight: 700; }
+  .note-sign { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--rose); font-style: italic; margin-top: 0.4rem !important; }
+  .note-hearts { color: var(--rose); font-size: 1.2rem; letter-spacing: 5px; }
+  .seal-row { display: flex; justify-content: flex-end; padding: 0 1.5rem 1.2rem; }
+  .seal {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f05070, #b81040);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; transform: rotate(-10deg);
+    box-shadow: 0 2px 10px rgba(184,16,64,0.3);
+  }
+
+  /* Pills */
+  .pills-row {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center;
+    animation: popIn 0.9s 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .pill {
+    background: white; border: 2px solid var(--blush);
+    border-radius: 50px; padding: 0.55rem 1.3rem;
+    font-size: 0.98rem; font-weight: 700; color: var(--deep);
+    box-shadow: 0 2px 10px rgba(232,49,90,0.08);
+  }
+
+  .big-wish {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 4.5vw, 2.3rem);
+    color: var(--green); text-align: center; font-style: italic;
+    animation: popIn 0.9s 0.7s cubic-bezier(0.34,1.56,0.64,1) both;
+    text-shadow: 0 2px 12px rgba(76,175,130,0.15);
+  }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+
+<!-- ===== SCREEN 1 ===== -->
+<div id="screen1">
+
+  <!-- Sad cat asking -->
+  <div class="s1-cat">
+    <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ears -->
+      <polygon points="38,68 28,40 55,58" fill="#ffebd2"/>
+      <polygon points="122,68 132,40 105,58" fill="#ffebd2"/>
+      <polygon points="40,66 32,48 53,62" fill="#f9a8c0"/>
+      <polygon points="120,66 128,48 107,62" fill="#f9a8c0"/>
+      <!-- Head -->
+      <ellipse cx="80" cy="98" rx="44" ry="40" fill="#ffebd2"/>
+      <!-- Sad eyes -->
+      <ellipse cx="64" cy="95" rx="10" ry="11" fill="white"/>
+      <ellipse cx="96" cy="95" rx="10" ry="11" fill="white"/>
+      <ellipse cx="66" cy="97" rx="6" ry="7" fill="#3d2b1f"/>
+      <ellipse cx="98" cy="97" rx="6" ry="7" fill="#3d2b1f"/>
+      <circle cx="68" cy="94" r="2" fill="white"/>
+      <circle cx="100" cy="94" r="2" fill="white"/>
+      <!-- Sad eyebrows -->
+      <path d="M55 84 Q64 79 73 84" stroke="#c0826a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M87 84 Q96 79 105 84" stroke="#c0826a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Tear -->
+      <ellipse cx="60" cy="107" rx="3" ry="5" fill="#90caf9" opacity="0.8"/>
+      <!-- Blush -->
+      <ellipse cx="52" cy="108" rx="9" ry="5" fill="#f9a8c0" opacity="0.55"/>
+      <ellipse cx="108" cy="108" rx="9" ry="5" fill="#f9a8c0" opacity="0.55"/>
+      <!-- Nose -->
+      <ellipse cx="80" cy="112" rx="4" ry="3" fill="#f48fb1"/>
+      <!-- Sad mouth -->
+      <path d="M74 118 Q80 114 86 118" stroke="#e91e63" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Whiskers -->
+      <line x1="28" y1="108" x2="58" y2="111" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="28" y1="115" x2="58" y2="114" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="102" y1="111" x2="132" y2="108" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="102" y1="114" x2="132" y2="115" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Question mark -->
+      <text x="68" y="58" font-size="28" fill="#e8315a" font-family="serif" font-weight="bold">?</text>
+    </svg>
+  </div>
+
+  <div class="s1-question">Kanishka,<br><span>Are you fine?</span> 🥺</div>
+  <div class="s1-subtitle">Be honest... I'm worried about you 🐱💕</div>
+
+  <div class="btn-row-s1">
+    <!-- YES is NOT an option -->
+    <button class="btn-yes" disabled>
+      Yes, I'm fine
+      <div class="tooltip">❌ Nope! Not an option 😤</div>
+    </button>
+
+    <!-- Only option is NO -->
+    <button class="btn-no" onclick="goToScreen2()">
+      No, I'm not 🥺
+    </button>
+  </div>
+
+</div>
+
+<!-- ===== SCREEN 2 ===== -->
+<div id="screen2">
+
+  <div class="main-title">Get Well Soon,<br><span>Kanishka</span> 🌸</div>
+
+  <!-- Cat with flower -->
+  <div class="cat-card">
+    <div class="cat-anim">
+      <svg width="200" height="230" viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Flower stem -->
+        <line x1="150" y1="218" x2="150" y2="142" stroke="#4caf82" stroke-width="4" stroke-linecap="round"/>
+        <!-- Leaves -->
+        <ellipse cx="142" cy="182" rx="13" ry="6" fill="#6fcf97" transform="rotate(-30 142 182)"/>
+        <ellipse cx="159" cy="165" rx="11" ry="5.5" fill="#6fcf97" transform="rotate(30 159 165)"/>
+        <!-- Petals -->
+        <circle cx="150" cy="130" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="163" cy="134" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="169" cy="120" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="163" cy="107" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="150" cy="103" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="137" cy="107" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="131" cy="120" r="10" fill="#fcd5df" opacity="0.9"/>
+        <circle cx="137" cy="134" r="10" fill="#fcd5df" opacity="0.9"/>
+        <!-- Flower center -->
+        <circle cx="150" cy="120" r="13" fill="#f9a825"/>
+        <circle cx="150" cy="120" r="7" fill="#f57f17"/>
+        <!-- Cat body -->
+        <ellipse cx="88" cy="178" rx="52" ry="46" fill="#ffebd2"/>
+        <ellipse cx="88" cy="185" rx="27" ry="26" fill="#fff3e8"/>
+        <!-- Cat head -->
+        <ellipse cx="88" cy="112" rx="46" ry="42" fill="#ffebd2"/>
+        <!-- Ears -->
+        <polygon points="48,80 38,50 68,70" fill="#ffebd2"/>
+        <polygon points="128,80 138,50 108,70" fill="#ffebd2"/>
+        <polygon points="50,78 43,57 64,72" fill="#f9a8c0"/>
+        <polygon points="126,78 133,57 112,72" fill="#f9a8c0"/>
+        <!-- Eyes (happy) -->
+        <ellipse cx="74" cy="110" rx="11" ry="12" fill="white"/>
+        <ellipse cx="102" cy="110" rx="11" ry="12" fill="white"/>
+        <ellipse cx="76" cy="112" rx="7" ry="8" fill="#3d2b1f"/>
+        <ellipse cx="104" cy="112" rx="7" ry="8" fill="#3d2b1f"/>
+        <circle cx="79" cy="109" r="2.5" fill="white"/>
+        <circle cx="107" cy="109" r="2.5" fill="white"/>
+        <!-- Happy brows -->
+        <path d="M65 98 Q74 93 83 98" stroke="#c0826a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M93 98 Q102 93 111 98" stroke="#c0826a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Blush -->
+        <ellipse cx="60" cy="124" rx="10" ry="6" fill="#f9a8c0" opacity="0.6"/>
+        <ellipse cx="116" cy="124" rx="10" ry="6" fill="#f9a8c0" opacity="0.6"/>
+        <!-- Nose -->
+        <ellipse cx="88" cy="128" rx="5" ry="4" fill="#f48fb1"/>
+        <!-- Smile -->
+        <path d="M82 133 Q88 139 94 133" stroke="#e91e63" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- Whiskers -->
+        <line x1="35" y1="122" x2="68" y2="126" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="35" y1="129" x2="68" y2="129" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="108" y1="126" x2="141" y2="122" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <line x1="108" y1="129" x2="141" y2="129" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <!-- Arms -->
+        <ellipse cx="46" cy="176" rx="15" ry="26" fill="#ffebd2" transform="rotate(20 46 176)"/>
+        <ellipse cx="136" cy="168" rx="15" ry="26" fill="#ffebd2" transform="rotate(-32 136 168)"/>
+        <!-- Right paw holding flower -->
+        <ellipse cx="150" cy="206" rx="12" ry="10" fill="#ffebd2"/>
+        <circle cx="144" cy="213" r="4" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <circle cx="150" cy="215" r="4" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <circle cx="156" cy="213" r="4" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <!-- Left paw -->
+        <ellipse cx="42" cy="205" rx="11" ry="9" fill="#ffebd2"/>
+        <circle cx="36" cy="211" r="3.5" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <circle cx="42" cy="213" r="3.5" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <circle cx="48" cy="211" r="3.5" fill="#ffebd2" stroke="#f9c7d4" stroke-width="1"/>
+        <!-- Tail -->
+        <path d="M136 220 Q162 226 156 210" stroke="#ffebd2" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <!-- Heart on tummy -->
+        <path d="M84 180 C84 177 80 174 80 178 C80 180 84 184 88 187 C92 184 96 180 96 178 C96 174 92 177 92 180 C92 176 84 176 84 180Z" fill="#f9a8c0" opacity="0.7"/>
+        <!-- Bow -->
+        <path d="M76 80 Q88 74 100 80" stroke="#e8315a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <circle cx="88" cy="79" r="4" fill="#e8315a"/>
+      </svg>
+    </div>
+    <div class="cat-tag">Get Well Soon! 🌸</div>
+    <div class="cat-hearts">💕 🌷 💕</div>
+  </div>
+
+  <!-- Love note -->
+  <div class="note-card">
+    <div class="note-header">
+      <div class="note-icon">💌</div>
+      <div class="note-header-title">A little note for you...</div>
+    </div>
+    <div class="note-body">
+      <p class="note-name">Dear Kanishka,</p>
+      <p>I know you're not feeling your best right now — and that honestly breaks my heart a little. 🥺</p>
+      <p>But just like flowers need rain to grow, you'll come back even more beautiful and stronger than before. 🌸</p>
+      <p>Please rest, drink lots of water, eat something warm and yummy, and let yourself heal. You don't have to be okay right now — just rest.</p>
+      <p>I'm thinking about you every single second and sending you the biggest, warmest hug through this screen. 🤗💕</p>
+      <p>Come back soon — it's just not the same without you. 🐱</p>
+      <p class="note-hearts">♥ ♥ ♥</p>
+      <p class="note-sign">Yours always, missing you loads 🌹</p>
+    </div>
+    <div class="seal-row"><div class="seal">💋</div></div>
+  </div>
+
+  <!-- Tips -->
+  <div class="pills-row">
+    <div class="pill">💧 Drink water</div>
+    <div class="pill">😴 Rest well</div>
+    <div class="pill">🍵 Eat warm food</div>
+    <div class="pill">💊 Take meds</div>
+    <div class="pill">🌸 Stay positive</div>
+    <div class="pill">🐱 Stay cozy</div>
+  </div>
+
+  <div class="big-wish">Wishing you a speedy recovery,<br>sweet Kanishka 🌷</div>
+
+</div>
+
+<script>
+// Falling hearts canvas
+(function(){
+  const c = document.getElementById('bg');
+  const ctx = c.getContext('2d');
+  const items = ['❤️','🌸','💕','🌷','🍀','💗','🌺','🐾','🩷','✨','🐱'];
+  let W, H, ps = [];
+  function resize(){ W=c.width=window.innerWidth; H=c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function make(y){
+    return {
+      x:Math.random()*W, y:y!==undefined?y:-30,
+      size:13+Math.random()*18, speed:0.7+Math.random()*1.5,
+      wobble:Math.random()*Math.PI*2, ws:0.02+Math.random()*0.025,
+      e:items[Math.floor(Math.random()*items.length)],
+      op:0.4+Math.random()*0.5
+    };
+  }
+  for(let i=0;i<28;i++) ps.push(make(Math.random()*H));
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    if(ps.length<40 && Math.random()<0.06) ps.push(make());
+    ps.forEach((p,i)=>{
+      p.wobble+=p.ws; p.y+=p.speed; p.x+=Math.sin(p.wobble)*0.7;
+      ctx.save(); ctx.globalAlpha=p.op;
+      ctx.font=p.size+'px serif';
+      ctx.translate(p.x,p.y); ctx.fillText(p.e,-p.size/2,p.size/2);
+      ctx.restore();
+      if(p.y>H+40) ps[i]=make();
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// Transition to screen 2
+function goToScreen2(){
+  const s1 = document.getElementById('screen1');
+  const s2 = document.getElementById('screen2');
+  s1.classList.add('hide');
+  setTimeout(()=>{
+    s1.style.display = 'none';
+    s2.style.display = 'flex';
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        s2.style.opacity = '1';
+        s2.style.transform = 'translateY(0)';
+      });
+    });
+  }, 600);
+}
+
+// Yes button — wiggle and show tooltip on click too
+document.querySelector('.btn-yes').addEventListener('click', function(){
+  this.style.animation = 'shake 0.4s ease';
+  setTimeout(()=> this.style.animation = '', 400);
+});
+</script>
+
+<style>
+@keyframes shake {
+  0%,100%{ transform: translateX(0); }
+  20%{ transform: translateX(-8px) rotate(-3deg); }
+  40%{ transform: translateX(8px) rotate(3deg); }
+  60%{ transform: translateX(-6px); }
+  80%{ transform: translateX(6px); }
+}
+</style>
+</body> 
+</html>
